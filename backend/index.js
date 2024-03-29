@@ -6,6 +6,7 @@ import veterinarioRoutes from "./routes/veterinarioRoutes.js";
 dotenv.config();
 
 const app = express();
+app.use(express.json());
 
 conectarDB();
 
