@@ -1,3 +1,4 @@
+import generarId from "../helpers/generarId.js";
 import generarJWT from "../helpers/generarJWT.js";
 import Veterinario from "../models/Veterinario.js";
 
@@ -25,8 +26,10 @@ const registrar = async (req,res) => {
     }
 };
 const perfil = (req,res) => {
+    const {veterinario} = req;
     res.json({
-        msg: 'Logueado Desde API/veterinarios/perfil'
+        msg: 'Logueado Desde API/veterinarios/perfil',
+        profile: veterinario
     })
 };
 const confirmar = async (req,res) => {
@@ -68,9 +71,58 @@ const autenticar = async (req,res) => {
         })
     }
 }
+const resetPassword = async (req,res) => {
+    const {email} = req.body;
+    const existeVeterinario = await Veterinario.findOne({email})
+    if (!existeVeterinario){
+        const error = new Error('ese email no está registrado');
+        return res.status(403).json({msg:error.message})
+    }
+    try{
+        existeVeterinario.token = generarId();
+        await existeVeterinario.save();
+        res.json({msg: 'token creado para resetear contraseña'})
+    }catch(err){
+        const error = new Error('error accediendo a la base de datos');
+        return res.status(403).json({msg:error.message})
+    }
+}
+const comprobarToken = async (req,res) => {
+    const {token} = req.params;
+    const tokenValido = await Veterinario.findOne({token})
+    if (tokenValido){
+        res.json({msg:'token válido, resetee su contraseña: '})
+    }
+    else{
+        const error = new Error('ese token no es válido');
+        return res.status(403).json({msg:error.message})
+    }
+}
+const nuevoPassword = async (req,res) => {
+    const {token} = req.params;
+    const {password} = req.body;
+    const existeVeterinario = await Veterinario.findOne({token})
+    if (!existeVeterinario){
+        const error = new Error('ese email no está registrado');
+        return res.status(403).json({msg:error.message})
+    }
+    try{
+        existeVeterinario.password = password;
+        existeVeterinario.token = null;
+        await existeVeterinario.save();
+        res.json({
+            msg : 'password reseteado con éxito'
+        })
+    }catch(err){
+        const error = new Error('error accediendo a la base de datos');
+        return res.status(403).json({msg:error.message})
+    }
+}
 export {
     registrar,
     perfil,
     confirmar,
-    autenticar
-}
+    autenticar,
+    resetPassword,
+    comprobarToken,
+    nuevoPassword}
