@@ -26,7 +26,7 @@ const registrar = async (req,res) => {
 };
 const perfil = (req,res) => {
     res.json({
-        msg: 'Desde API/veterinarios/perfil'
+        msg: 'Logueado Desde API/veterinarios/perfil'
     })
 };
 const confirmar = async (req,res) => {
