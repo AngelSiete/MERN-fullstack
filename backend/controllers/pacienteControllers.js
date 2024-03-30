@@ -31,13 +31,45 @@ const obtenerPaciente = async (req,res) => {
 }
 
 const actualizarPaciente = async (req,res) => {
-    const pacientes = await Paciente.find().where('veterinario').equals(req.veterinario)
-    res.json({pacientes})
+    const {id} = req.params;
+    const paciente = await Paciente.findById(id)
+    if(!paciente){
+        res.status(404).json({msg:'paciente no encontrado'})
+    }
+    if (paciente.veterinario._id.toString() !== req.veterinario._id.toString()){
+        return res.status(400).json({msg:'acción no válida'})
+    }
+    // actualizamos paciente
+    paciente.nombre = req.body.nombre || paciente.nombre;
+    paciente.propietario = req.body.propietario || paciente.propietario;
+    paciente.email = req.body.email || paciente.email;
+    paciente.fecha = req.body.fecha || paciente.fecha;
+    paciente.sintomas = req.body.sintomas || paciente.sintomas;
+    try{
+        const pacienteActualizado = await paciente.save();
+        res.json({msg:'éxito al actualizar', pacienteActualizado})
+    }catch(err){
+        const error = new Error('error accediendo a pacientes');
+        return res.status(400).json({msg:error.message})
+    }
 }
 
 const eliminarPaciente = async (req,res) => {
-    const pacientes = await Paciente.find().where('veterinario').equals(req.veterinario)
-    res.json({pacientes})
+    const {id} = req.params;
+    const paciente = await Paciente.findById(id)
+    if(!paciente){
+        res.status(404).json({msg:'paciente no encontrado'})
+    }
+    if (paciente.veterinario._id.toString() !== req.veterinario._id.toString()){
+        return res.status(400).json({msg:'acción no válida'})
+    }
+    try{
+        await paciente.deleteOne();
+        res.json({msg:'paciente eliminado con éxito'})
+    }catch(err){
+        const error = new Error('error accediendo a pacientes');
+        return res.status(400).json({msg:error.message})
+    }
 }
 
 export {
