@@ -14,7 +14,6 @@ const pacienteSchema = mongoose.Schema({
     email:{
         type: String,
         required:true,
-        unique:true,
         trim:true
     },
     fecha:{

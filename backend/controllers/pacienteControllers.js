@@ -1,6 +1,6 @@
 import Paciente from "../models/Paciente.js";
 
-const obtenerPaciente = async (req,res) => {
+const obtenerPacientes = async (req,res) => {
     const pacientes = await Paciente.find().where('veterinario').equals(req.veterinario)
     res.json({pacientes})
 }
@@ -17,7 +17,33 @@ const agregarPaciente = async (req,res) => {
     }
 }
 
+const obtenerPaciente = async (req,res) => {
+    const {id} = req.params;
+    const paciente = await Paciente.findById(id)
+    if (paciente.veterinario._id.toString() !== req.veterinario._id.toString()){
+        return res.status(400).json({msg:'acción no válida'})
+    }
+    if (paciente){
+        res.json({
+            paciente
+        })
+    }
+}
+
+const actualizarPaciente = async (req,res) => {
+    const pacientes = await Paciente.find().where('veterinario').equals(req.veterinario)
+    res.json({pacientes})
+}
+
+const eliminarPaciente = async (req,res) => {
+    const pacientes = await Paciente.find().where('veterinario').equals(req.veterinario)
+    res.json({pacientes})
+}
+
 export {
+    obtenerPacientes,
     obtenerPaciente,
-    agregarPaciente
+    agregarPaciente,
+    actualizarPaciente,
+    eliminarPaciente
 }
