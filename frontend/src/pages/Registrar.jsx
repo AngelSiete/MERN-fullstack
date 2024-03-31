@@ -1,6 +1,20 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Registrar(){
+    const [valoresRegistro, setValoresRegistro] = useState({
+        email: '',
+        password: '',
+        repetirpassword: ''
+    })
+    function handleChangeInput(e){
+        const {name, value} = e.target;
+        setValoresRegistro((prevState) => ({
+            ...prevState,
+            [name]:value
+        }))
+    }
+    console.log('aki',valoresRegistro)
     return (
         <>
           <div>
@@ -22,6 +36,8 @@ export default function Registrar(){
                   type="text"
                   placeholder="email"
                   className="border w-full p-3 mt-3 bg-gray-200 rounded-xl"
+                  name='email'
+                  onChange={handleChangeInput}
                 />
               </div>
               <div className="my-5">
@@ -35,6 +51,8 @@ export default function Registrar(){
                   type="password"
                   placeholder="password"
                   className="border w-full p-3 mt-3 bg-gray-200 rounded-xl"
+                  name='password'
+                  onChange={handleChangeInput}
                 />
               </div>
               <div className="my-5">
@@ -48,6 +66,8 @@ export default function Registrar(){
                   type="password"
                   placeholder="repetir password"
                   className="border w-full p-3 mt-3 bg-gray-200 rounded-xl"
+                  name='repetirpassword'
+                  onChange={handleChangeInput}
                 />
               </div>
               <input
