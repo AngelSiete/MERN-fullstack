@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Alerta from "../components/Alerta";
 
 export default function Registrar(){
     const [valoresRegistro, setValoresRegistro] = useState({
@@ -7,6 +8,7 @@ export default function Registrar(){
         password: '',
         repetirpassword: ''
     })
+    const [hayErrores, setHayErrores] = useState({})
     function handleChangeInput(e){
         const {name, value} = e.target;
         setValoresRegistro((prevState) => ({
@@ -14,7 +16,23 @@ export default function Registrar(){
             [name]:value
         }))
     }
-    console.log('aki',valoresRegistro)
+    function handleSubmit(e){
+        e.preventDefault();
+        if (valoresRegistro.password !== valoresRegistro.repetirpassword){
+            setHayErrores((prevState) =>({
+                ...prevState,
+                msg: 'las contraseñas deben ser iguales',
+                error:true
+            }))
+        }
+        if (valoresRegistro.password.length < 8){
+            setHayErrores((prevState) =>({
+                ...prevState,
+                msg: 'lacontraseña es muy corta',
+                error:true
+            }))
+        }
+    }
     return (
         <>
           <div>
@@ -24,7 +42,7 @@ export default function Registrar(){
             </h1>
           </div>
           <div className="mt-20 md:mt-5 py-6 shadow-lg px-5 rounded-xl bg-white">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="my-5">
                 <label
                   className="uppercase text-gray-600 block text-xl font-bold"
@@ -37,6 +55,7 @@ export default function Registrar(){
                   placeholder="email"
                   className="border w-full p-3 mt-3 bg-gray-200 rounded-xl"
                   name='email'
+                  required
                   onChange={handleChangeInput}
                 />
               </div>
@@ -52,6 +71,7 @@ export default function Registrar(){
                   placeholder="password"
                   className="border w-full p-3 mt-3 bg-gray-200 rounded-xl"
                   name='password'
+                  required
                   onChange={handleChangeInput}
                 />
               </div>
@@ -67,6 +87,7 @@ export default function Registrar(){
                   placeholder="repetir password"
                   className="border w-full p-3 mt-3 bg-gray-200 rounded-xl"
                   name='repetirpassword'
+                  required
                   onChange={handleChangeInput}
                 />
               </div>
@@ -80,6 +101,7 @@ export default function Registrar(){
               <Link className="bg-indigo-700 py-3 rounded-xl text-white uppercase font-bold hover:cursor-pointer hover:bg-indigo-400 px-6" to="/">Inicia sesión</Link>
               <Link className="bg-indigo-700 py-3 rounded-xl text-white uppercase font-bold hover:cursor-pointer hover:bg-indigo-400 px-6" to="/olvidepassword">Olvidé contraseña</Link>
             </nav>
+            {hayErrores && <Alerta alerta={hayErrores}/>}
           </div>
         </>
       );
