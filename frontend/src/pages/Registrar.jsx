@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import clienteAxios from "../../config/axios";
 import Alerta from "../components/Alerta";
 
 export default function Registrar() {
@@ -33,8 +33,7 @@ export default function Registrar() {
       return;
     }
     try {
-      const url = "http://localhost:4000/api/veterinarios";
-      const respuesta = await axios.post(url, valoresRegistro);
+      const respuesta = await clienteAxios.post('/veterinarios', valoresRegistro);
       if (respuesta.status == 200) {
         setValoresRegistro({});
         setAlerta({
