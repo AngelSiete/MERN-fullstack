@@ -1,10 +1,11 @@
+import emailRegistro from "../helpers/emailRegistro.js";
 import generarId from "../helpers/generarId.js";
 import generarJWT from "../helpers/generarJWT.js";
 import Veterinario from "../models/Veterinario.js";
 
 const registrar = async (req,res) => {
     // middleware
-    const {email} = req.body;
+    const {email, nombre} = req.body;
     const existeUsuario = await Veterinario.findOne({email});
     if (existeUsuario){
         const error = new Error('email ya en uso');
@@ -14,6 +15,9 @@ const registrar = async (req,res) => {
     try{
         const veterinario = new Veterinario(req.body);
         const veterinarioGuardado = await veterinario.save()
+        emailRegistro({
+            email,nombre,token: veterinarioGuardado.token
+        });
         res.json({
             msg: 'Desde API/veterinarios/ veterinario guardado con éxito',
             vet: veterinarioGuardado

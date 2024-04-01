@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Alerta from "../components/Alerta";
+
 export default function Registrar() {
   const [valoresRegistro, setValoresRegistro] = useState({
     nombre: "",
@@ -41,7 +42,7 @@ export default function Registrar() {
           error: false,
         });
       }
-    } catch (err) {
+    } catch (error) {
       setAlerta({
         msg: error.response.data.msg,
         error: true,
