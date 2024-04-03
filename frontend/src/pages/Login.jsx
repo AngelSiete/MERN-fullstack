@@ -1,6 +1,43 @@
 import { Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { useState } from "react";
+import Alerta from "../components/Alerta";
+import clienteAxios from "../../config/axios";
 
 export default function Login() {
+  const {auth, setAuth} = useAuth();
+  const [alerta,setAlerta] = useState({})
+  const [valoresLogin, setValoresLogin] = useState({
+    password: "",
+    email: "",
+  });
+  function handleChangeInput(e) {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setValoresLogin((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+  const handleSubmit = async (e) =>{
+    e.preventDefault();
+    try{
+      const {data} = await clienteAxios.post('/veterinarios/login', valoresLogin)
+      if(data.msg === 'autenticado'){
+        localStorage.setItem('token',data.token)
+        setAlerta({
+          msg: 'iniciaste sesión correctamente',
+          error:false
+        })
+      }
+    }catch(err){
+      setAlerta({
+        msg: err.response.data.msg,
+        error:true
+      })
+    }
+  }
+  const { msg } = alerta;
   return (
     <>
       <div>
@@ -10,7 +47,8 @@ export default function Login() {
         </h1>
       </div>
       <div className="mt-20 md:mt-5 py-6 shadow-lg px-5 rounded-xl bg-white">
-        <form>
+        {msg && <Alerta alerta={alerta}/>}
+        <form onSubmit={handleSubmit}>
           <div className="my-5">
             <label
               className="uppercase text-gray-600 block text-xl font-bold"
@@ -22,6 +60,9 @@ export default function Login() {
               type="text"
               placeholder="email"
               className="border w-full p-3 mt-3 bg-gray-200 rounded-xl"
+              name="email"
+              onChange={handleChangeInput}
+              required
             />
           </div>
           <div className="my-5">
@@ -35,6 +76,9 @@ export default function Login() {
               type="password"
               placeholder="password"
               className="border w-full p-3 mt-3 bg-gray-200 rounded-xl"
+              name="password"
+              onChange={handleChangeInput}
+              required
             />
           </div>
           <input
