@@ -11,6 +11,7 @@ export default function Login() {
     password: "",
     email: "",
   });
+  const navigate = useNavigate()
   function handleChangeInput(e) {
     e.preventDefault();
     const { name, value } = e.target;
@@ -29,6 +30,7 @@ export default function Login() {
           msg: 'iniciaste sesión correctamente',
           error:false
         })
+        navigate('/admin')
       }
     }catch(err){
       setAlerta({
