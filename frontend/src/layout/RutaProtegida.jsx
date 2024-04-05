@@ -5,13 +5,12 @@ import Footer from '../components/Footer'
 
 const RutaProtegida = () => {
     const {auth, cargando} = useAuth();
-    console.log(auth)
     return(
         <>
-        <Header></Header>
+        <Header/>
            {cargando && <p>Cargando...</p>}
-           { auth ? (<main className="container mx-auto mt-10"><Outlet/></main>) : <Navigate to="/"/>}
-        <Footer></Footer>
+           { auth?._id ? (<main className="container mx-auto mt-10"><Outlet/></main>) : <Navigate to="/"/>}
+        <Footer/>
         </>
     )
 }

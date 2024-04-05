@@ -5,7 +5,7 @@ import Alerta from "../components/Alerta";
 import clienteAxios from "../../config/axios";
 
 export default function Login() {
-  const {auth, setAuth} = useAuth();
+  const {setAuth} = useAuth();
   const [alerta,setAlerta] = useState({})
   const [valoresLogin, setValoresLogin] = useState({
     password: "",
@@ -24,14 +24,14 @@ export default function Login() {
     e.preventDefault();
     try{
       const {data} = await clienteAxios.post('/veterinarios/login', valoresLogin)
-      if(data.msg === 'autenticado'){
+      console.log(data)
         localStorage.setItem('token',data.token)
+        setAuth(data)
         setAlerta({
           msg: 'iniciaste sesión correctamente',
           error:false
         })
         navigate('/admin')
-      }
     }catch(err){
       setAlerta({
         msg: err.response.data.msg,

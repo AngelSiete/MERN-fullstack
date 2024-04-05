@@ -62,20 +62,18 @@ const confirmar = async (req, res) => {
 };
 const autenticar = async (req, res) => {
   const { password, email } = req.body;
-  const usuarioLogin = await Veterinario.findOne({ email });
-  if (!usuarioLogin) {
+  const usuario = await Veterinario.findOne({ email });
+  if (!usuario) {
     const error = new Error("ese email no está registrado");
     return res.status(403).json({ msg: error.message });
   }
-  if (!usuarioLogin.confirmado) {
+  if (!usuario.confirmado) {
     const error = new Error("ese email no está confirmado");
     return res.status(403).json({ msg: error.message });
   }
-  if (await usuarioLogin.comprobarPassword(password)) {
-    res.json({
-      msg: "autenticado",
-      token: generarJWT(usuarioLogin.id),
-    });
+  if (await usuario.comprobarPassword(password)) {
+    usuario.token = generarJWT(usuario.id)
+    res.json( {_id : usuario._id, nombre: usuario.nombre, email:usuario.email,token:usuario.token});
   }
 };
 const resetPassword = async (req, res) => {
