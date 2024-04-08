@@ -24,7 +24,6 @@ export default function Login() {
     e.preventDefault();
     try{
       const {data} = await clienteAxios.post('/veterinarios/login', valoresLogin)
-      console.log(data)
         localStorage.setItem('token',data.token)
         setAuth(data)
         setAlerta({
