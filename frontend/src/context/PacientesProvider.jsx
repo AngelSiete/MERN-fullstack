@@ -4,7 +4,8 @@ import clienteAxios from "../../config/axios";
 const PacientesContext = createContext();
 
 export const PacientesProvider = ({ children }) => {
-    const [pacientes,setPacientes] = useState([]);
+    const [pacientes, setPacientes] = useState([]);
+    const [paciente, setPaciente] = useState({});
     useEffect(()=>{
         const obtenerPacientes = async () => {
             try{
@@ -42,8 +43,11 @@ export const PacientesProvider = ({ children }) => {
             return 
         }
     }
+    const setEdicion = (paciente) => {
+        setPaciente(paciente)
+    }
   return (
-    <PacientesContext.Provider value={{pacientes, guardarPaciente}}>{children}</PacientesContext.Provider>
+    <PacientesContext.Provider value={{pacientes, guardarPaciente, setEdicion}}>{children}</PacientesContext.Provider>
   );
 };
 
