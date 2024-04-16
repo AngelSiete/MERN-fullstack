@@ -47,7 +47,7 @@ export const PacientesProvider = ({ children }) => {
         setPaciente(paciente)
     }
   return (
-    <PacientesContext.Provider value={{pacientes, guardarPaciente, setEdicion}}>{children}</PacientesContext.Provider>
+    <PacientesContext.Provider value={{pacientes, paciente, guardarPaciente, setEdicion}}>{children}</PacientesContext.Provider>
   );
 };
 
