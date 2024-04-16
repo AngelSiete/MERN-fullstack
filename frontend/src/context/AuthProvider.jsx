@@ -37,9 +37,12 @@ const AuthProvider = ({children}) => {
         localStorage.removeItem('token');
         setAuth({})
     }
+    const actualizarPerfil = (data) =>{
+        console.log(data)
+    }
     return(
         <AuthContext.Provider value={{
-            auth, setAuth, cargando, cerrarSesion
+            auth, setAuth, cargando, cerrarSesion,actualizarPerfil
         }}>
             {children}
         </AuthContext.Provider>
