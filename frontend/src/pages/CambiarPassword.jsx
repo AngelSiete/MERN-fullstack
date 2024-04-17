@@ -16,7 +16,7 @@ export default function CambiarPassword(){
           [e.target.name]: e.target.value,
         });
       };
-      const handleFormSubmit = e => {
+      const handleFormSubmit = async e => {
         e.preventDefault();
        if (Object.values(password).some(campo => campo === '')){
         setAlerta({
@@ -30,7 +30,8 @@ export default function CambiarPassword(){
             error: true
         })
        }
-       guardarPassword(password)
+       const respuesta = await guardarPassword(password)
+       setAlerta(respuesta)
       }
     const { msg } = alerta
     return(
